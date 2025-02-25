@@ -1,9 +1,14 @@
+import { fetchData } from '@/services'
+import { ProductCard } from '@/product'
 import styles from "./page.module.css";
 
-export default function Home() {
+export default async function Home() {
+  const data = await fetchData('http://localhost:3001/products');
   return (
-    <div className={styles.page}>
-      <h1>Hello World!</h1>
+    <div>
+      <div className={styles.productsContainer}>
+        <ProductCard products={data} />
+      </div>
     </div>
   );
 }

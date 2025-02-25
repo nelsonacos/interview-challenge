@@ -1,0 +1,17 @@
+.productCard {
+    display: flex;
+    gap: 25px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 16px;
+  }
+
+.productCardActions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
