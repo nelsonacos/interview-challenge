@@ -1,31 +1,31 @@
 "use client"
+import { useState, useEffect, ReactNode } from 'react'
+import { CartContext } from './cart.context'
+import { CartItem } from './cart.types'
 import { Product } from '@/types'
-import { createContext, ReactNode, useEffect, useState } from 'react';
-
-type CartItem = Record<string, {
-    product: Product;
-    quantity: number;
-}>
-
-interface CartContextProps {
-    cartItems: CartItem;
-    addToCart: (product: Product) => void;
-    removeFromCart: (productId: string) => void;
-    clearCart: () => void;
-}
-
-export const CartContext = createContext<CartContextProps | undefined>(undefined)
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-    const storedCart = localStorage.getItem('cartItems');
-    const initialCart = storedCart ? JSON.parse(storedCart) : {};
-    const [cartItems, setCartItems] = useState<CartItem>(initialCart);
+    const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
-        if (Object.keys(cartItems).length > 0) {
-            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        setIsClient(true);
+    }, []);
+
+    const [cartItems, setCartItems] = useState<CartItem>({});
+
+    useEffect(() => {
+        if (isClient) {
+            const storedCart = localStorage.getItem("cartItems");
+            const initialCart = storedCart ? JSON.parse(storedCart) : {};
+            setCartItems(initialCart);
         }
-    }, [cartItems])
+    }, [isClient]);
+
+    useEffect(() => {
+        if (isClient && Object.keys(cartItems).length > 0) {
+            localStorage.setItem("cartItems", JSON.stringify(cartItems));
+        }
+    }, [cartItems, isClient]);
 
     const addToCart = (product: Product) => {
         setCartItems((prevCart) => {
