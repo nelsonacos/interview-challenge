@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ReactQueryProvider } from "@/react-query-provider";
 import { CartProvider } from '@/cart'
 import "./globals.css";
 
@@ -26,9 +27,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <CartProvider>
-          {children}
-        </CartProvider>
+        <ReactQueryProvider>
+          <CartProvider>
+            {children}
+          </CartProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );
