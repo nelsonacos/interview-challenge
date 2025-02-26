@@ -7,18 +7,17 @@ import { Product } from '@/types'
 
 import styles from './product.module.css'
 
-export const ProductCard = ({ products }: { products: Product[] }) => {
+export const ProductCard = ({ products, handleProductClick }: { products: Product[], handleProductClick: (product: Product) => void }) => {
     const defaultImage = '/default-img.png';
     const { addToCart, removeFromCart, cartItems } = useCart();
 
     return (
         <>
             {products.map((product: Product) => {
-                // Verifica si el producto está en el carrito
                 const isInCart = cartItems[product.product_id];
 
                 return (
-                    <article className={styles.productCard} key={product.product_id}>
+                    <article style={{ cursor: 'pointer' }} onClick={() => { handleProductClick(product) }} className={styles.productCard} key={product.product_id}>
                         <figure>
                             <Image
                                 src={product.image_url || defaultImage}
@@ -38,15 +37,22 @@ export const ProductCard = ({ products }: { products: Product[] }) => {
                         </div>
                         <div className={styles.productCardActions}>
                             <button
-                                onClick={() => addToCart(product)}
+                                onClick={(e) => {
+                                    e.stopPropagation(); // Evita que el clic se propague al artículo
+                                    addToCart(product);
+                                }}
                                 type="button"
                                 aria-label={`Add ${product.name} to cart`}
                             >
-                                {isInCart ? 'added' : 'Add to Cart'}
+                                {isInCart ? 'Added' : 'Add to Cart'}
                             </button>
+
                             {isInCart && (
                                 <button
-                                    onClick={() => removeFromCart(product.product_id)}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        removeFromCart(product.product_id);
+                                    }}
                                     type="button"
                                     aria-label={`Remove ${product.name} from cart`}
                                 >
