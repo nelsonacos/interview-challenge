@@ -186,11 +186,26 @@
         }
     ],
     "categories": [
-        "aguas",
-        "vinos",
-        "cervezas",
-        "gaseosas",
-        "mas vendidos"
+        {
+            "id": 1,
+            "name": "aguas"
+        },
+        {
+            "id": 2,
+            "name": "vinos"
+        },
+        {
+            "id": 3,
+            "name": "cervezas"
+        },
+        {
+            "id": 4,
+            "name": "gaseosas"
+        },
+        {
+            "id": 5,
+            "name": "mas vendidos"
+        }
     ],
     "products": [
         {

@@ -4,7 +4,12 @@ export interface Products {
     products:        Product[];
 }
 
-export enum Category {
+export interface Category {
+    id:   Name
+    name: string;
+}
+
+export enum Name {
     Aguas = "aguas",
     Cervezas = "cervezas",
     Gaseosas = "gaseosas",
@@ -19,7 +24,7 @@ export interface Product {
     price_per_unit:      string;
     list_price_id:       string;
     sku:                 string;
-    categories?:         Category[];
+    categories?:         Name[];
     units_per_pack:      number;
     image_url:           string;
     handle:              string;

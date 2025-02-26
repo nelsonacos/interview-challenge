@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchData } from "@/services";
+import { Category } from "@/types";
 
 const fetchRecommendations = async (productId: string) => {
   const data = await fetchData(`http://localhost:3001/recommendations?product_id=${productId}`);
@@ -15,7 +16,7 @@ export const useRecommendations = (productId?: string) => {
 };
 
 export const useCategories = () => {
-  return useQuery<string[]>({
+  return useQuery<Category[]>({
     queryKey: ["categories"],
     queryFn: async () => fetchData("http://localhost:3001/categories"),
   });

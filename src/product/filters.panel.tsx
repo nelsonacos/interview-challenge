@@ -24,8 +24,8 @@ export const FiltersPanel = ({ selectedCategory, onFilterChange }: FiltersPanelP
             >
                 <option value="">Todas las Categorías</option>
                 {categories?.map((category) => (
-                    <option key={category} value={category}>
-                        {category}
+                    <option key={category.id} value={category.name}>
+                        {category.name}
                     </option>
                 ))}
             </select>
