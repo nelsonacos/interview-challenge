@@ -13,3 +13,10 @@ export const useRecommendations = (productId?: string) => {
     enabled: !!productId,
   });
 };
+
+export const useCategories = () => {
+  return useQuery<string[]>({
+    queryKey: ["categories"],
+    queryFn: async () => fetchData("http://localhost:3001/categories"),
+  });
+};
