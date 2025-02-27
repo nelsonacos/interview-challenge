@@ -1,114 +1,116 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { CartProvider, useCart } from '@/cart';
+import { ProductCard } from '@/product/product.card';
+import { mockProducts } from '@/product/__mocks__/productsMock';
 import { vi } from 'vitest';
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
-import { CartProvider } from '@/cart';
-import Home from '@/app/page';
+import { CartContextProps } from '@/cart/cart.types';
 
-const queryClient = new QueryClient();
+vi.mock('@/cart', async (importOriginal) => {
+    const actual = (await importOriginal()) || {};
+    return {
+        ...actual,
+        useCart: vi.fn(),
+    };
+});
 
-const mockProducts = [
-    {
-        product_id: '1',
-        variant_id: 'v1',
-        total_price: '10.00',
-        price_per_unit: '5.00',
-        list_price_id: '1',
-        sku: 'sku1',
-        categories: ['aguas'],
-        units_per_pack: 1,
-        image_url: '/product1.jpg',
-        handle: 'product1',
-        compare_at_price: '12.00',
-        allowed_packs: [1],
-        name: 'Product 1',
-        description: 'Description of product 1',
-        discount_percentage: 10,
-        size: 500,
-        price_per_litre: '20.00',
-    },
-    {
-        product_id: '2',
-        variant_id: 'v2',
-        total_price: '15.00',
-        price_per_unit: '7.50',
-        list_price_id: '2',
-        sku: 'sku2',
-        categories: ['cervezas'],
-        units_per_pack: 1,
-        image_url: '/product2.jpg',
-        handle: 'product2',
-        compare_at_price: '18.00',
-        allowed_packs: [1],
-        name: 'Product 2',
-        description: 'Description of product 2',
-        discount_percentage: 5,
-        size: 750,
-        price_per_litre: '20.00',
-    },
-];
+describe('ProductCard Component', () => {
+    const mockAddToCart = vi.fn();
+    const mockRemoveFromCart = vi.fn();
+    const mockClearCart = vi.fn();
 
-describe('Home Page', () => {
-    vi.mock('@tanstack/react-query', async () => {
-        const originalModule = await vi.importActual('@tanstack/react-query');
-
-        return {
-            ...originalModule,
-            useQuery: vi.fn(),
-        };
+    beforeEach(() => {
+        vi.mocked(useCart).mockReturnValue({
+            cartItems: {},
+            addToCart: mockAddToCart,
+            removeFromCart: mockRemoveFromCart,
+            clearCart: mockClearCart,
+        } as CartContextProps);
     });
 
-    test('renders the component with an empty list', () => {
-        (useQuery as vi.Mock).mockReturnValue({
-            isLoading: true,
-            error: null,
-            data: [],
-        });
-
-        render(
-            <QueryClientProvider client={queryClient}>
-                <CartProvider>
-                    <Home />
-                </CartProvider>
-            </QueryClientProvider>
-        );
-
-        expect(screen.getByText('Loading...')).toBeDefined();
+    afterEach(() => {
+        vi.clearAllMocks();
     });
 
-    test('shows error text when there is an error', () => {
-        (useQuery as vi.Mock).mockReturnValue({
-            isLoading: false,
-            error: new Error('Something went wrong'),
-            data: null,
-        });
-
+    test('calls addToCart when clicking the "Add to Cart" button', () => {
         render(
-            <QueryClientProvider client={queryClient}>
-                <CartProvider>
-                    <Home />
-                </CartProvider>
-            </QueryClientProvider>
+            <CartProvider>
+                <ProductCard product={mockProducts[0]} handleProductClick={() => { }} />
+            </CartProvider>
         );
 
-        expect(screen.getByText(/Error: Something went wrong/)).toBeDefined();
+        const button = screen.getByRole('button', { name: `Add ${mockProducts[0].name} to cart` });
+
+        fireEvent.click(button);
+
+        expect(mockAddToCart).toHaveBeenCalledTimes(1);
+        expect(mockAddToCart).toHaveBeenCalledWith(mockProducts[0]);
     });
 
-    test('renders products correctly', () => {
-        (useQuery as vi.Mock).mockReturnValue({
-            isLoading: false,
-            error: null,
-            data: mockProducts, // Usamos los mockProducts aquí
-        });
+    test('calls removeFromCart when clicking the "Remove" button', () => {
+        vi.mocked(useCart).mockReturnValue({
+            cartItems: {
+                [mockProducts[0].product_id]: {
+                    product: mockProducts[0],
+                    quantity: 1
+                }
+            },
+            addToCart: mockAddToCart,
+            removeFromCart: mockRemoveFromCart,
+            clearCart: mockClearCart,
+        } as CartContextProps);
 
         render(
-            <QueryClientProvider client={queryClient}>
-                <CartProvider>
-                    <Home />
-                </CartProvider>
-            </QueryClientProvider>
+            <CartProvider>
+                <ProductCard product={mockProducts[0]} handleProductClick={() => { }} />
+            </CartProvider>
         );
 
-        expect(screen.getByRole('heading', { name: 'Product 1' })).toBeDefined();
-        expect(screen.getByRole('heading', { name: 'Product 2' })).toBeDefined();
+        const removeButton = screen.getByRole('button', {
+            name: `Remove ${mockProducts[0].name} from cart`
+        });
+
+        fireEvent.click(removeButton);
+
+        expect(mockRemoveFromCart).toHaveBeenCalledTimes(1);
+        expect(mockRemoveFromCart).toHaveBeenCalledWith(mockProducts[0].product_id);
+    });
+
+    test('calls handleProductClick when clicking on the product card', () => {
+        const mockHandleProductClick = vi.fn();
+
+        render(
+            <CartProvider>
+                <ProductCard
+                    product={mockProducts[0]}
+                    handleProductClick={mockHandleProductClick}
+                />
+            </CartProvider>
+        );
+
+        const productCard = screen.getByRole('article');
+
+        fireEvent.click(productCard);
+
+        expect(mockHandleProductClick).toHaveBeenCalledTimes(1);
+        expect(mockHandleProductClick).toHaveBeenCalledWith(mockProducts[0]);
+    });
+
+    test('does not call handleProductClick when clicking "Add to Cart" button', () => {
+        const mockHandleProductClick = vi.fn();
+
+        render(
+            <CartProvider>
+                <ProductCard
+                    product={mockProducts[0]}
+                    handleProductClick={mockHandleProductClick}
+                />
+            </CartProvider>
+        );
+
+        const addButton = screen.getByRole('button', { name: `Add ${mockProducts[0].name} to cart` });
+
+        fireEvent.click(addButton);
+
+        expect(mockHandleProductClick).not.toHaveBeenCalled();
     });
 });

@@ -1,3 +1,9 @@
+.productsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+  padding: 16px;
+}
 .productCard {
     display: flex;
     gap: 25px;
@@ -9,7 +15,6 @@
     overflow: hidden;
     padding: 16px;
   }
-
 .productCardActions {
     display: flex;
     justify-content: space-between;

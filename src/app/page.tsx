@@ -2,8 +2,7 @@
 import { fetchData } from '@/services'
 import { useQuery } from '@tanstack/react-query'
 import { Product } from '@/types'
-import { ProductCard, RecommendedPopup, FiltersPanel } from '@/product'
-import styles from "./page.module.css";
+import { ProductCardList, RecommendedPopup, FiltersPanel } from '@/product'
 import { useMemo, useState } from 'react'
 
 export default function Home() {
@@ -39,9 +38,7 @@ export default function Home() {
   return (
     <div>
       <FiltersPanel selectedCategory={selectedCategory} onFilterChange={handleFilterChange} />
-      <div className={styles.productsContainer}>
-        <ProductCard products={filteredProducts} handleProductClick={handleProductClick} />
-      </div>
+      <ProductCardList products={filteredProducts} handleProductClick={handleProductClick} />
       <RecommendedPopup selectedProduct={selectedProduct} products={products} onClose={() => setSelectedProduct(null)} />
     </div>
   );

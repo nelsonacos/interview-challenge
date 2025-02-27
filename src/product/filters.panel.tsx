@@ -15,6 +15,8 @@ export const FiltersPanel = ({ selectedCategory, onFilterChange }: FiltersPanelP
     if (isLoading) return <p>Cargando categorías...</p>;
     if (error) return <p>Error al cargar categorías</p>;
 
+    const categoryNames = categories?.map((category) => category.name) || [];
+
     return (
         <div>
             <h3>Filtrar por Categoría</h3>
@@ -23,9 +25,9 @@ export const FiltersPanel = ({ selectedCategory, onFilterChange }: FiltersPanelP
                 value={selectedCategory || ""}
             >
                 <option value="">Todas las Categorías</option>
-                {categories?.map((category) => (
-                    <option key={category.id} value={category.name}>
-                        {category.name}
+                {categoryNames.map((name) => (
+                    <option key={name} value={name}>
+                        {name}
                     </option>
                 ))}
             </select>

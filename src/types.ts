@@ -24,7 +24,7 @@ export interface Product {
     price_per_unit:      string;
     list_price_id:       string;
     sku:                 string;
-    categories?:         Name[];
+    categories?:         string[]; 
     units_per_pack:      number;
     image_url:           string;
     handle:              string;
