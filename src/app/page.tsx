@@ -11,7 +11,7 @@ export default function Home() {
     queryFn: async () => fetchData('http://localhost:3001/products'),
   })
 
-  const products = data ?? [];
+  const products = useMemo(() => data ?? [], [data]);
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
