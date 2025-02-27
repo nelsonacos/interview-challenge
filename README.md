@@ -95,11 +95,12 @@ Testing is one of the fundamental requirements in the challenge and in software 
 When the user clicks on a product, we want to display the recommended items for that product. The customer should be able 
 - [x] to add the recommended product to the cart, too.
 - [x] The user should be able to filter all items matching a certain category. I.e. show "wines", or "beers" only.
-- [ ] Add tests
+- [x] Add tests
+- [ ] Improve design
 - [ ] Checkout page
 - [ ] Cart page
-- [ ] Improve design
-
+- [ ] More tests 
+ 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ### Deploy on Vercel

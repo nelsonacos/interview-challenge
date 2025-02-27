@@ -1,5 +1,6 @@
 import { useCart } from '@/cart'
 import { Product } from '@/types'
+import { normalizeTitle } from '@/product/product.helpers'
 
 export const RecommendedCard = ({
     productId,
@@ -15,9 +16,9 @@ export const RecommendedCard = ({
     if (!product) return <p>Product not found</p>
 
     return (
-        <div>
-            <h3 style={{ color: 'black' }}>{product.name}</h3>
+        <article>
+            <h3 style={{ color: 'black' }}>{normalizeTitle(product.name)}</h3>
             <button onClick={() => addToCart(product)}>Add to Cart</button>
-        </div>
+        </article>
     )
 }
