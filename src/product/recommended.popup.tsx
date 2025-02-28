@@ -18,7 +18,7 @@ export const RecommendedPopup = ({ selectedProduct, products, onClose }: {
 
                 <div className={styles.popupContainer}>
                     <button aria-label='X' className={styles.closeButton} onClick={onClose}>✕</button>
-                    <h2>Recommended Products for {selectedProduct.name}</h2>
+                    <h4 className={styles.popupTitle}>Recommended For You</h4>
                     {isLoading ? (
                         <p>Loading recommendations...</p>
                     ) : (

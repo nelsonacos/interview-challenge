@@ -1,3 +1,4 @@
+
 import he from 'he'
 
 export const normalizeTitle = (text: string) => {
@@ -7,9 +8,15 @@ export const normalizeTitle = (text: string) => {
         .replace(/\s*-\s*$/, "");
 }
 
-export const normalizePrice = (price: string) => {
-    return parseFloat(price).toLocaleString("es-AR", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-    });
+export const normalizePrice = (price: string | number) => {
+    const parsedPrice = parseFloat(price.toString());
+    return isNaN(parsedPrice) ? 0 : Number(parsedPrice.toFixed(2));
 }
+
+export const formatPrice = (price: string | number, currency: string = "ARS", locale: string = "es-AR"): string => {
+    const normalizedPrice = normalizePrice(price);
+    return Number(normalizedPrice).toLocaleString(locale, {
+        style: "currency",
+        currency: currency,
+    });
+};

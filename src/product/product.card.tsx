@@ -1,6 +1,6 @@
 "use client";
-import { SyntheticEvent } from "react";
-import { normalizeTitle, normalizePrice } from "./product.helpers";
+import { SyntheticEvent, useMemo } from "react";
+import { normalizeTitle, formatPrice } from "./product.helpers";
 import { useCart } from "@/cart";
 import Image from "next/image";
 import { Product } from "@/types";
@@ -13,8 +13,9 @@ interface ProductCardProps {
 
 export const ProductCard = ({ product, handleProductClick }: ProductCardProps) => {
     const defaultImage = "/default-img.png";
-    const { addToCart, removeFromCart, cartItems } = useCart();
-    const isInCart = cartItems[product.product_id];
+    const { addToCart, removeFromCart, cartItems, getQuantityByProductId } = useCart();
+    const isInCart = useMemo(() => cartItems[product.product_id], [cartItems, product.product_id]);
+    const formattedPrice = useMemo(() => formatPrice(product.price_per_unit), [product.price_per_unit]);
 
     return (
         <article
@@ -22,7 +23,7 @@ export const ProductCard = ({ product, handleProductClick }: ProductCardProps) =
             onClick={() => handleProductClick(product)}
             className={styles.productCard}
         >
-            <figure>
+            <figure className={styles.productCardImageContainer}>
                 <Image
                     src={product.image_url || defaultImage}
                     onError={(e: SyntheticEvent<HTMLImageElement, Event>) => {
@@ -30,14 +31,17 @@ export const ProductCard = ({ product, handleProductClick }: ProductCardProps) =
                         e.currentTarget.src = defaultImage;
                     }}
                     alt={product.name}
-                    width={200}
-                    height={200}
+                    fill
+                    objectFit="cover"
                     unoptimized
                 />
             </figure>
             <div>
-                <h3>{normalizeTitle(product.name)}</h3>
-                <span>{normalizePrice(product.price_per_unit)}</span>
+                <h3 className={styles.productName}>
+                    {normalizeTitle(product.name)}
+                </h3>
+                <span className={styles.productPrice}>
+                    {formattedPrice}</span>
             </div>
             <div className={styles.productCardActions}>
                 <button
@@ -48,8 +52,14 @@ export const ProductCard = ({ product, handleProductClick }: ProductCardProps) =
                     type="button"
                     aria-label={`Add ${product.name} to cart`}
                 >
-                    {isInCart ? "Added" : "Add to Cart"}
+                    {isInCart ? "+" : "Add to Cart"}
                 </button>
+
+                {isInCart && (
+                    <span className={styles.inCartDisplay}>
+                        {getQuantityByProductId(product.product_id)}
+                    </span>
+                )}
 
                 {isInCart && (
                     <button
@@ -60,7 +70,7 @@ export const ProductCard = ({ product, handleProductClick }: ProductCardProps) =
                         type="button"
                         aria-label={`Remove ${product.name} from cart`}
                     >
-                        Remove
+                        -
                     </button>
                 )}
             </div>

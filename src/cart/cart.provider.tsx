@@ -1,52 +1,53 @@
-"use client"
-import { useState, useEffect, ReactNode } from 'react'
-import { CartContext } from './cart.context'
-import { CartItem } from './cart.types'
-import { Product } from '@/types'
+"use client";
+import { useState, useEffect, ReactNode } from 'react';
+import { CartContext } from './cart.context';
+import { CartItem } from './cart.types';
+import { Product } from '@/types';
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-    const [isClient, setIsClient] = useState(false);
-
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
-
-    const [cartItems, setCartItems] = useState<CartItem>({});
-
-    useEffect(() => {
-        if (isClient) {
+    const [cartItems, setCartItems] = useState<CartItem>(() => {
+        if (typeof window !== "undefined") {
             const storedCart = localStorage.getItem("cartItems");
-            const initialCart = storedCart ? JSON.parse(storedCart) : {};
-            setCartItems(initialCart);
+            return storedCart ? JSON.parse(storedCart) : {};
         }
-    }, [isClient]);
+        return {};
+    });
 
     useEffect(() => {
-        if (isClient && Object.keys(cartItems).length > 0) {
+        if (Object.keys(cartItems).length > 0) {
             localStorage.setItem("cartItems", JSON.stringify(cartItems));
         }
-    }, [cartItems, isClient]);
+    }, [cartItems]);
 
     const addToCart = (product: Product) => {
         setCartItems((prevCart) => {
-            const newCart = { ...prevCart };
             const productId = product.product_id;
-
-            if (newCart[productId]) {
-                newCart[productId].quantity += 1;
-            } else {
-                newCart[productId] = { product, quantity: 1 };
-            }
-            return newCart;
+            return {
+                ...prevCart,
+                [productId]: {
+                    product,
+                    quantity: (prevCart[productId]?.quantity || 0) + 1,
+                },
+            };
         });
     };
 
     const removeFromCart = (productId: string) => {
         setCartItems((prevCart: CartItem) => {
             const newCart = { ...prevCart };
-            delete newCart[productId];
+            if (newCart[productId]) {
+                if (newCart[productId].quantity > 1) {
+                    newCart[productId].quantity -= 1;
+                } else {
+                    delete newCart[productId];
+                }
+            }
             return newCart;
         });
+    };
+
+    const getQuantityByProductId = (productId: string): number => {
+        return cartItems[productId]?.quantity || 0;
     };
 
     const clearCart = () => {
@@ -54,8 +55,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, clearCart }}>
+        <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, getQuantityByProductId, clearCart }}>
             {children}
         </CartContext.Provider>
-    )
-}
+    );
+};

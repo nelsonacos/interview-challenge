@@ -8,4 +8,5 @@ export interface CartContextProps {
     addToCart: (product: Product) => void;
     removeFromCart: (productId: string) => void;
     clearCart: () => void;
+    getQuantityByProductId: (productId: string) => number;
 }

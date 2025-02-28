@@ -1,38 +1,116 @@
+.filtersPanelContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 36px;
+  height: 38px;
+  margin-top: 82px;
+  padding: 0 36px;
+}
+.shoppingcartpanel {
+  height: 100%;
+  color: white;
+  font-weight: 400;
+}
+.categoriesPanel {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 100%;
+}
+.CategoriesPanelName {
+  color: white;
+  font-size: 18px;
+  font-weight: 400;
+  height: 100%;
+}
 .productsContainer {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 16px;
+  gap: 24px;
+  margin: 36px 0;
   padding: 16px;
 }
 .productCard {
-    display: flex;
-    gap: 25px;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    padding: 16px;
+  background-color: #202B38;
+  display: flex;
+  gap: 25px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color 0.3s ease;
+  margin-top: 16px;
+  padding: 16px;
   }
-.productCardActions {
+  .productCard:hover {
+    background-color: #1A2530;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+.productCard:hover::after {
+  opacity: 1;
+}
+.productCardImageContainer {
+  position: relative;
+  width: 225px;
+  margin: 0;
+  padding: 0;
+  height: 225px;
+  background-color: white;
+  overflow: hidden;
+  background-color: white;
+}
+.productName {
+  color: white;
+  font-weight: 400;
+  font-size: 18px;
+}
+.productPrice {
+  color: white;
+  font-weight: 700;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+}
+  .productCardActions {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 8px;
+    line-height: 50%;
+    }
+  .inCartDisplay{
+    background-color: #006FDF;
+    border-radius: 20%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-
   .popupContainer {
     position: fixed;
+    overflow-y: scroll;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 20px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     z-index: 1000;
-    width: 90%;
+    width: 500px;
     max-width: 500px;
+    height: 500px;
+    max-height: 500px;
     border-radius: 10px;
     background-color: white;
+    background-color: #202B38;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   
   .overlay {
@@ -46,12 +124,54 @@
   }
 
   .closeButton {
+    padding: 0;
     position: absolute;
+    font-weight: 700;
     top: 10px;
     right: 15px;
-    background: none;
-    border: none;
-    font-size: 20px;
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px; 
     cursor: pointer;
-    color: #333;
+}
+.popupTitle { 
+  font-size: 20px;
+  font-weight: 500;
+}
+.productMiniCard {
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 0;
+  width: 470px;
+  height: 110px;
+}
+.productMiniCardColumnLeft {
+  position: relative;
+  width: 90px;
+  margin: 0;
+  padding: 0 10px;
+  height: 90px;
+  background-color: white;
+}
+.productMiniCardColumnRight {
+  position: relative;
+  margin-top: -26px;
+  margin-left: 26px;
+}
+.productNameInMiniCard {
+  font-size: 14px;
+  color: white;
+  font-weight: 400;
+}
+.productPriceInMiniCard {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  margin-right: 24px;
 }
