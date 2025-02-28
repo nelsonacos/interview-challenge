@@ -16,6 +16,7 @@ vi.mock('@/cart', async (importOriginal) => {
 describe('ProductCard Component', () => {
     const mockAddToCart = vi.fn();
     const mockRemoveFromCart = vi.fn();
+    const mockGetQuantityByProductId = vi.fn()
     const mockClearCart = vi.fn();
 
     beforeEach(() => {
@@ -23,6 +24,7 @@ describe('ProductCard Component', () => {
             cartItems: {},
             addToCart: mockAddToCart,
             removeFromCart: mockRemoveFromCart,
+            getQuantityByProductId: mockGetQuantityByProductId,
             clearCart: mockClearCart,
         } as CartContextProps);
     });
@@ -56,6 +58,7 @@ describe('ProductCard Component', () => {
             },
             addToCart: mockAddToCart,
             removeFromCart: mockRemoveFromCart,
+            getQuantityByProductId: mockGetQuantityByProductId,
             clearCart: mockClearCart,
         } as CartContextProps);
 

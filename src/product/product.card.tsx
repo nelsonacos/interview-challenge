@@ -1,6 +1,6 @@
 "use client";
 import { SyntheticEvent, useMemo } from "react";
-import { normalizeTitle, normalizePrice } from "./product.helpers";
+import { normalizeTitle, formatPrice } from "./product.helpers";
 import { useCart } from "@/cart";
 import Image from "next/image";
 import { Product } from "@/types";
@@ -14,8 +14,8 @@ interface ProductCardProps {
 export const ProductCard = ({ product, handleProductClick }: ProductCardProps) => {
     const defaultImage = "/default-img.png";
     const { addToCart, removeFromCart, cartItems, getQuantityByProductId } = useCart();
-
     const isInCart = useMemo(() => cartItems[product.product_id], [cartItems, product.product_id]);
+    const formattedPrice = useMemo(() => formatPrice(product.price_per_unit), [product.price_per_unit]);
 
     return (
         <article
@@ -37,8 +37,11 @@ export const ProductCard = ({ product, handleProductClick }: ProductCardProps) =
                 />
             </figure>
             <div>
-                <h3 className={styles.productName}>{normalizeTitle(product.name)}</h3>
-                <span className={styles.productPrice}>{normalizePrice(product.price_per_unit)}</span>
+                <h3 className={styles.productName}>
+                    {normalizeTitle(product.name)}
+                </h3>
+                <span className={styles.productPrice}>
+                    {formattedPrice}</span>
             </div>
             <div className={styles.productCardActions}>
                 <button

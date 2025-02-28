@@ -96,7 +96,7 @@ When the user clicks on a product, we want to display the recommended items for 
 - [x] to add the recommended product to the cart, too.
 - [x] The user should be able to filter all items matching a certain category. I.e. show "wines", or "beers" only.
 - [x] Add tests
-- [ ] Improve design
+- [x] Improve design
 - [ ] Checkout page
 - [ ] Cart page
 - [ ] More tests 
