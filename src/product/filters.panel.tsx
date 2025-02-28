@@ -1,4 +1,5 @@
 import { useCategories } from "@/product";
+import styles from './product.module.css'
 
 interface FiltersPanelProps {
     selectedCategory: string | null;
@@ -18,19 +19,25 @@ export const FiltersPanel = ({ selectedCategory, onFilterChange }: FiltersPanelP
     const categoryNames = categories?.map((category) => category.name) || [];
 
     return (
-        <div>
-            <h3>Filtrar por Categoría</h3>
-            <select
-                onChange={(e) => handleFilter(e.target.value || null)}
-                value={selectedCategory || ""}
-            >
-                <option value="">Todas las Categorías</option>
-                {categoryNames.map((name) => (
-                    <option key={name} value={name}>
-                        {name}
-                    </option>
-                ))}
-            </select>
+        <div className={styles.filtersPanelContainer}>
+            <h3 className={styles.shoppingcartpanel}>
+                Shopping Cart
+            </h3>
+            <div className={styles.categoriesPanel}>
+                <h3 className={styles.CategoriesPanelName}>Filtrar por</h3>
+                <select
+                    style={{ height: '100%', margin: '0' }}
+                    onChange={(e) => handleFilter(e.target.value || null)}
+                    value={selectedCategory || ""}
+                >
+                    <option value="">Todas las Categorías</option>
+                    {categoryNames.map((name) => (
+                        <option key={name} value={name}>
+                            {name}
+                        </option>
+                    ))}
+                </select>
+            </div>
         </div>
     );
 };
