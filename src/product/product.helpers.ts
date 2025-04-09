@@ -8,9 +8,16 @@ export const normalizeTitle = (text: string) => {
         .replace(/\s*-\s*$/, "");
 }
 
-export const normalizePrice = (price: string | number) => {
-    const parsedPrice = parseFloat(price.toString());
-    return isNaN(parsedPrice) ? 0 : Number(parsedPrice.toFixed(2));
+export function normalizePrice(value: string | number): number {
+    const num = typeof value === 'string' ? Number(value) : value;
+  
+    if (Number.isNaN(num)) return 0;
+  
+    return roundTo(num, 2);
+}
+
+const  roundTo = (n: number, digits = 2): number => {
+    return Number(Math.round(Number(n + 'e' + digits)) + 'e-' + digits);
 }
 
 export const formatPrice = (price: string | number, currency: string = "ARS", locale: string = "es-AR"): string => {
